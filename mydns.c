@@ -142,72 +142,72 @@ void myloadcommonblacklist(){
 
 // ip class files reading
 void myconfig(){
-  FILE *fp;
-  char *auxbuf,*auxwl,*auxbl,*aux,*auxi;
-  struct sockaddr_in netip;
-  int i,j;
-  
-  auxbuf=(char *)malloc(BUFMSG*sizeof(char));
-  auxwl=(char *)malloc(BUFMSG*sizeof(char));
-  auxbl=(char *)malloc(BUFMSG*sizeof(char));
-
-  // deallocation for new allocation
-  if(myipclass==NULL){
-  	for(i=0;i<totipclass;i++){
-  		for(j=0;j<myipclass[i].nmywl;j++)free(myipclass[i].mywl[j]);
-  		free(myipclass[i].mywl);
-  		for(j=0;j<myipclass[i].nmybl;j++)free(myipclass[i].mybl[j]);
-  		free(myipclass[i].mybl);
-  	}
-  	free(myipclass);
-  }
-
-  myipclass=(struct ip_class *)malloc(NIPCLASS*sizeof(struct ip_class));  
-  fp=fopen(FILECONFIG,"rt");
-  for(totipclass=0;;){
-  	fscanf(fp,"%s %u %s %u %s %s",auxbuf,&myipclass[totipclass].cidr,myipclass[totipclass].id,&myipclass[totipclass].bl,auxwl,auxbl);
-  	if(feof(fp))break;
-  	myipclass[totipclass].totquery=myipclass[totipclass].totfiltered=0;
-  	inet_pton(AF_INET,auxbuf,&(netip.sin_addr));
-  	myipclass[totipclass].ipv4=ntohl(netip.sin_addr.s_addr)&mymask[myipclass[totipclass].cidr];
-  	
-  	// white list, / separated, \ terminated 
-  	myipclass[totipclass].mywl=(char **)malloc(LENLIST*sizeof(char *));
-  	myipclass[totipclass].nmywl=0;
-  	for(aux=auxi=auxwl;;){
-  		for(;*aux!='\\';aux++)if(*aux=='/')break;
-  		if(*aux=='\\')break;
-  		*aux='\0';
-  		myipclass[totipclass].mywl[myipclass[totipclass].nmywl]=(char *)malloc((strlen(auxi)+1)*sizeof(char));
-  		strcpy(myipclass[totipclass].mywl[myipclass[totipclass].nmywl],auxi);
-  		myipclass[totipclass].nmywl++;
-  		aux++;
-  		auxi=aux;
-  	}
-  	qsort(myipclass[totipclass].mywl,myipclass[totipclass].nmywl,sizeof(char *),mystrcmp);
-  	
-  	// black list, / separated, \ terminated
-  	myipclass[totipclass].mybl=(char **)malloc(LENLIST*sizeof(char *));
-  	myipclass[totipclass].nmybl=0;
-  	for(aux=auxi=auxbl;;){
-  		for(;*aux!='\\';aux++)if(*aux=='/')break;
-  		if(*aux=='\\')break;
-  		*aux='\0';
-  		myipclass[totipclass].mybl[myipclass[totipclass].nmybl]=(char *)malloc((strlen(auxi)+1)*sizeof(char));
-  		strcpy(myipclass[totipclass].mybl[myipclass[totipclass].nmybl],auxi);
-  		myipclass[totipclass].nmybl++;
-  		aux++;
-  		auxi=aux;
-  	}
-  	qsort(myipclass[totipclass].mybl,myipclass[totipclass].nmybl,sizeof(char *),mystrcmp);
-  	totipclass++;
+	FILE *fp;
+	char *auxbuf,*auxwl,*auxbl,*aux,*auxi;
+	struct sockaddr_in netip;
+	int i,j;
+	
+	auxbuf=(char *)malloc(BUFMSG*sizeof(char));
+	auxwl=(char *)malloc(BUFMSG*sizeof(char));
+	auxbl=(char *)malloc(BUFMSG*sizeof(char));
+	
+	// deallocation for new allocation
+	if(myipclass==NULL){
+		for(i=0;i<totipclass;i++){
+			for(j=0;j<myipclass[i].nmywl;j++)free(myipclass[i].mywl[j]);
+			free(myipclass[i].mywl);
+			for(j=0;j<myipclass[i].nmybl;j++)free(myipclass[i].mybl[j]);
+			free(myipclass[i].mybl);
+		}
+		free(myipclass);
+	}
+	
+	myipclass=(struct ip_class *)malloc(NIPCLASS*sizeof(struct ip_class));
+	fp=fopen(FILECONFIG,"rt");
+	for(totipclass=0;;){
+		fscanf(fp,"%s %u %s %u %s %s",auxbuf,&myipclass[totipclass].cidr,myipclass[totipclass].id,&myipclass[totipclass].bl,auxwl,auxbl);
+		if(feof(fp))break;
+		myipclass[totipclass].totquery=myipclass[totipclass].totfiltered=0;
+		inet_pton(AF_INET,auxbuf,&(netip.sin_addr));
+		myipclass[totipclass].ipv4=ntohl(netip.sin_addr.s_addr)&mymask[myipclass[totipclass].cidr];
+		
+		// white list, / separated, \ terminated
+		myipclass[totipclass].mywl=(char **)malloc(LENLIST*sizeof(char *));
+		myipclass[totipclass].nmywl=0;
+		for(aux=auxi=auxwl;;){
+			for(;*aux!='\\';aux++)if(*aux=='/')break;
+			if(*aux=='\\')break;
+			*aux='\0';
+			myipclass[totipclass].mywl[myipclass[totipclass].nmywl]=(char *)malloc((strlen(auxi)+1)*sizeof(char));
+			strcpy(myipclass[totipclass].mywl[myipclass[totipclass].nmywl],auxi);
+			myipclass[totipclass].nmywl++;
+			aux++;
+			auxi=aux;
+		}
+		qsort(myipclass[totipclass].mywl,myipclass[totipclass].nmywl,sizeof(char *),mystrcmp);
+		
+		// black list, / separated, \ terminated
+		myipclass[totipclass].mybl=(char **)malloc(LENLIST*sizeof(char *));
+		myipclass[totipclass].nmybl=0;
+		for(aux=auxi=auxbl;;){
+			for(;*aux!='\\';aux++)if(*aux=='/')break;
+			if(*aux=='\\')break;
+			*aux='\0';
+			myipclass[totipclass].mybl[myipclass[totipclass].nmybl]=(char *)malloc((strlen(auxi)+1)*sizeof(char));
+			strcpy(myipclass[totipclass].mybl[myipclass[totipclass].nmybl],auxi);
+			myipclass[totipclass].nmybl++;
+			aux++;
+			auxi=aux;
+		}
+		qsort(myipclass[totipclass].mybl,myipclass[totipclass].nmybl,sizeof(char *),mystrcmp);
+		totipclass++;
 	}
 	fclose(fp);
-  qsort(myipclass,totipclass,sizeof(struct ip_class),myipcmp);
-
-  free(auxbuf);
-  free(auxwl);
-  free(auxbl);
+	qsort(myipclass,totipclass,sizeof(struct ip_class),myipcmp);
+	
+	free(auxbuf);
+	free(auxwl);
+	free(auxbl);
 }
 
 // domain search with maximum deep to avoid loops for not termination
