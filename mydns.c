@@ -232,71 +232,71 @@ int domsearch(char **myvector,long lenvector,char *mydom){
 }
 
 void *manage(void *arg_void){
-  struct arg_pass *myarg=(struct arg_pass *)arg_void;
-  int sockreq,lenrecv,i,j,ml,lenaux,lenanswer,wlok,blok,cblok,mystop,ret;
-  long myclass,mystatus;
-  unsigned int query;
-  unsigned long ipidx;
-  unsigned long ipsrcaddr,ipprofaddr,ip_tocheck,ipclassaddr;
-  struct sockaddr_in reqaddr,netip;
-  struct sockaddr_in6 reqaddr6;
-  char *recv,*auxbuf,*dominio,*aux1,*aux2,ipbuf[30];
-  time_t curtime;
-  struct tm *loctime;
-  double myuptime;
-  struct timeval tv;
-
-  recv=(char *)malloc(BUFMSG*sizeof(char));
-  auxbuf=(char *)malloc(BUFMSG*sizeof(char));
-  dominio=(char *)malloc(BUFMSG*sizeof(char));
-
-  // check query header
-  mystop=0;
-  // QR B2 b7
-  if(!mystop && ((*(myarg->mesg+2))&0b10000000)!=0){mystop=1; totmalformed++; }
-  // AA B2 b2
-  if(!mystop && ((*(myarg->mesg+2))&0b00000100)!=0){mystop=1; totmalformed++; }
-  // Z B3 b6
-  if(!mystop && ((*(myarg->mesg+3))&0b01000000)!=0){mystop=1; totmalformed++; }
-  // Rcode B3 b3-0
-  if(!mystop && ((*(myarg->mesg+3))&0b00001111)!=0){mystop=1; totmalformed++; }
-  // Total Answer B6 B7
-  if(!mystop && (*(myarg->mesg+6))!=0){mystop=1; totmalformed++; }
-  if(!mystop && (*(myarg->mesg+7))!=0){mystop=1; totmalformed++; }
-
-  // define the ip to check to implement the profiled port
-  if(!mystop){
-  	ip_tocheck=ntohl(myarg->cliaddr.sin_addr.s_addr);
-  	if((ip_tocheck&IPMASK12)==IPCLASS){
-  		ipidx=ip_tocheck-IPCLASS;
-  		if(myprofile[ipidx]!=0)ip_tocheck=myprofile[ipidx];
-  	}
-  }
-
-  // define the filter class
-  if(!mystop){
-  	myclass=myipsearch(ip_tocheck);
-  	if(myclass==-1){mystop=1; totoutscope++; }
-  }
-
-  // domain name analisys
-  if(!mystop){
-  	lenanswer=0;
-  	for(i=0,aux1=dominio,aux2=myarg->mesg+12;;){
-  		ml=(int)*aux2;
-  		if(ml==0)break;
- 			aux2++;
- 			i+=ml;
- 			if(i>=BUFMSG){mystop=1; totmalformed++; break;}
-  		for(j=0;j<ml;j++)*aux1++=tolower(*aux2++);
-  		i++;
- 			if(i>=BUFMSG){mystop=1; totmalformed++; break;}
- 			*aux1++='.';
- 			lenanswer+=ml+1;
-  	}
-  	if(i==0)*aux1='\0';
-  	else *(--aux1)='\0';
-  }
+	struct arg_pass *myarg=(struct arg_pass *)arg_void;
+	int sockreq,lenrecv,i,j,ml,lenaux,lenanswer,wlok,blok,cblok,mystop,ret;
+	long myclass,mystatus;
+	unsigned int query;
+	unsigned long ipidx;
+	unsigned long ipsrcaddr,ipprofaddr,ip_tocheck,ipclassaddr;
+	struct sockaddr_in reqaddr,netip;
+	struct sockaddr_in6 reqaddr6;
+	char *recv,*auxbuf,*dominio,*aux1,*aux2,ipbuf[30];
+	time_t curtime;
+	struct tm *loctime;
+	double myuptime;
+	struct timeval tv;
+	
+	recv=(char *)malloc(BUFMSG*sizeof(char));
+	auxbuf=(char *)malloc(BUFMSG*sizeof(char));
+	dominio=(char *)malloc(BUFMSG*sizeof(char));
+	
+	// check query header
+	mystop=0;
+	// QR B2 b7
+	if(!mystop && ((*(myarg->mesg+2))&0b10000000)!=0){mystop=1; totmalformed++; }
+	// AA B2 b2
+	if(!mystop && ((*(myarg->mesg+2))&0b00000100)!=0){mystop=1; totmalformed++; }
+	// Z B3 b6
+	if(!mystop && ((*(myarg->mesg+3))&0b01000000)!=0){mystop=1; totmalformed++; }
+	// Rcode B3 b3-0
+	if(!mystop && ((*(myarg->mesg+3))&0b00001111)!=0){mystop=1; totmalformed++; }
+	// Total Answer B6 B7
+	if(!mystop && (*(myarg->mesg+6))!=0){mystop=1; totmalformed++; }
+	if(!mystop && (*(myarg->mesg+7))!=0){mystop=1; totmalformed++; }
+	
+	// define the ip to check to implement the profiled port
+	if(!mystop){
+		ip_tocheck=ntohl(myarg->cliaddr.sin_addr.s_addr);
+		if((ip_tocheck&IPMASK12)==IPCLASS){
+			ipidx=ip_tocheck-IPCLASS;
+			if(myprofile[ipidx]!=0)ip_tocheck=myprofile[ipidx];
+		}
+	}
+	
+	// define the filter class
+	if(!mystop){
+		myclass=myipsearch(ip_tocheck);
+		if(myclass==-1){mystop=1; totoutscope++; }
+	}
+	
+	// domain name analisys
+	if(!mystop){
+		lenanswer=0;
+		for(i=0,aux1=dominio,aux2=myarg->mesg+12;;){
+			ml=(int)*aux2;
+			if(ml==0)break;
+			aux2++;
+			i+=ml;
+			if(i>=BUFMSG){mystop=1; totmalformed++; break;}
+			for(j=0;j<ml;j++)*aux1++=tolower(*aux2++);
+			i++;
+			if(i>=BUFMSG){mystop=1; totmalformed++; break;}
+			*aux1++='.';
+			lenanswer+=ml+1;
+		}
+		if(i==0)*aux1='\0';
+		else *(--aux1)='\0';
+	}
   
   // request analisys
   if(!mystop){
