@@ -1,5 +1,6 @@
-// mydns v1.08 2015 by GM
+// mydns v1.09 2015 by GM
 // changelog
+// v1.09 totallquery inserter and status with comma separated format
 // v1.08 double backup dns query with 200ms timeout and separate boot & conf file
 // v1.07 backup dns query to 8.8.8.8 with 200ms timeout  
 // v1.06 200ms timeout during dns query to avoid thread stale
@@ -69,7 +70,7 @@ long totcommonblacklist=0;
 char dnserver[20],bkp1dns[20],bkp2dns[20],ipv4splash[20],ipv6splash[40],mypassword[40];
 time_t starttime;
 char cstarttime[30];
-unsigned long totmalformed,totoutscope;
+unsigned long totmalformed,totoutscope,totallquery;
 unsigned long mymask[33];
 unsigned long *myprofile;
 
@@ -301,6 +302,7 @@ void *manage(void *arg_void){
 	// request analisys
 	if(!mystop){
 		myipclass[myclass].totquery++;
+		totallquery++;
 		
 		// query type
 		query=*(aux2+2);
@@ -418,8 +420,7 @@ void *manage(void *arg_void){
 							}
 							// status
 							else if(strcmp(aux2,"status")==0){
-								totmalformed=2345;
-								sprintf(auxbuf,"start=%s totmalformed=%'lu totoutscope=%lu",cstarttime,totmalformed,totoutscope);
+								sprintf(auxbuf,"start=%s totallquery=%'lu totmalformed=%'lu totoutscope=%'lu",cstarttime,totallquery,totmalformed,totoutscope);
 							}
 							// unknown
 							else sprintf(auxbuf,"command unknown");
@@ -531,7 +532,7 @@ int main(int argc, char**argv){
 	FILE *fp;
 	
 	// initialization
-	totmalformed=totoutscope=0;
+	totallquery=totmalformed=totoutscope=0;
 	tid=(pthread_t *)malloc(NTHREAD*sizeof(pthread_t));
 	commonblacklist=(char **)malloc(NCOMMONBLACKLIST*sizeof(char *));
 	setlocale(LC_NUMERIC,"");
