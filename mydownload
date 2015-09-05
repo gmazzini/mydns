@@ -1,0 +1,22 @@
+#!/bin/bash
+
+cd /mydns
+rm -rf download
+mkdir download
+cd download
+
+for i in "adult" "drogue" "gambling" "hacking" "phishing" "redirector" "malware"
+do
+	echo $i
+	wget ftp://ftp.ut-capitole.fr/pub/reseau/cache/squidguard_contrib/$i.tar.gz -O $i.tar.gz
+	tar xfpz $i.tar.gz
+	rm -f *.gz
+done
+
+for a in * 
+do
+	echo $a
+	grep -v '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}' $a/domains >> mylist
+done
+
+sort -n mylist > /mydns/commonblacklist
