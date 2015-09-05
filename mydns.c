@@ -436,92 +436,88 @@ void *manage(void *arg_void){
 				memcpy(aux1+13,auxbuf,lenaux);
 			}
 		}
- 		
- 		else  {
- 			// user whitelist
- 			wlok=0;
- 			if((query==1||query==28) && domsearch(myipclass[myclass].mywl,myipclass[myclass].nmywl,dominio))wlok=1;
- 			
- 			// user blacklist
- 			blok=0;
- 			if(!wlok && (query==1||query==28) && domsearch(myipclass[myclass].mybl,myipclass[myclass].nmybl,dominio))blok=1;
- 			
- 			// common black list
- 			cblok=0;
- 			if(!wlok && !blok && (query==1||query==28) && myipclass[myclass].bl && domsearch(commonblacklist,totcommonblacklist,dominio))cblok=1;
- 			
- 			// set splash
- 			if(cblok || blok){
- 				myipclass[myclass].totfiltered++;
- 				if(query==28)lenrecv=12+lenanswer+28;
- 				else lenrecv=12+lenanswer+16;
- 				if(lenrecv<BUFMSG){
- 					recv[0]=*myarg->mesg; recv[1]=*(myarg->mesg+1); recv[2]=129; recv[3]=128; recv[4]=*(myarg->mesg+4); recv[5]=*(myarg->mesg+5); recv[6]=0; recv[7]=1; recv[8]=0; recv[9]=0; recv[10]=0; recv[11]=0; 
- 					memcpy(recv+12,myarg->mesg+12,lenanswer);
- 					aux1=recv+12+lenanswer;
- 					if(query==28){
- 						aux1[0]=192; aux1[1]=12; aux1[2]=0; aux1[3]=28; aux1[4]=0; aux1[5]=1; aux1[6]=0; aux1[7]=0; aux1[8]=14; aux1[9]=16; aux1[10]=0; aux1[11]=16;
- 						inet_pton(AF_INET6,ipv6splash,&(reqaddr6.sin6_addr));
- 						memcpy(aux1+12,&reqaddr6.sin6_addr.s6_addr,16);
- 					}
- 					else {
- 						aux1[0]=192; aux1[1]=12; aux1[2]=0; aux1[3]=1; aux1[4]=0; aux1[5]=1; aux1[6]=0; aux1[7]=0; aux1[8]=14; aux1[9]=16; aux1[10]=0; aux1[11]=4;
- 						inet_pton(AF_INET,ipv4splash,&(reqaddr.sin_addr));
- 						memcpy(aux1+12,&reqaddr.sin_addr.s_addr,4);
- 					}
- 				}
- 			}
- 			
- 			// resolution
- 			else {
- 				sockreq=socket(AF_INET,SOCK_DGRAM,IPPROTO_UDP);
- 				tv.tv_sec=0;
- 				tv.tv_usec=TIMEOUTUSEC;
- 				setsockopt(sockreq,SOL_SOCKET,SO_RCVTIMEO,&tv,sizeof(tv));
- 				memset((char *)&reqaddr,0,sizeof(reqaddr));
- 				reqaddr.sin_family=AF_INET;
- 				reqaddr.sin_addr.s_addr=inet_addr(dnserver);
- 				reqaddr.sin_port=htons(53);
- 				sendto(sockreq,myarg->mesg,myarg->lenmesg,0,(struct sockaddr *)&reqaddr,sizeof(reqaddr));
- 				lenrecv=recvfrom(sockreq,recv,BUFMSG,0,NULL,NULL);
- 				close(sockreq);
- 				if(lenrecv<1){
- 					sockreq=socket(AF_INET,SOCK_DGRAM,IPPROTO_UDP);
- 					tv.tv_sec=0;
- 					tv.tv_usec=TIMEOUTUSEC;
- 					setsockopt(sockreq,SOL_SOCKET,SO_RCVTIMEO,&tv,sizeof(tv));
- 					memset((char *)&reqaddr,0,sizeof(reqaddr));
- 					reqaddr.sin_family=AF_INET;
- 					reqaddr.sin_addr.s_addr=inet_addr(bkp1dns);
- 					reqaddr.sin_port=htons(53);
- 					sendto(sockreq,myarg->mesg,myarg->lenmesg,0,(struct sockaddr *)&reqaddr,sizeof(reqaddr));
- 					lenrecv=recvfrom(sockreq,recv,BUFMSG,0,NULL,NULL);
- 					close(sockreq);
- 				}
- 				if(lenrecv<1){
- 					sockreq=socket(AF_INET,SOCK_DGRAM,IPPROTO_UDP);
- 					tv.tv_sec=0;
- 					tv.tv_usec=TIMEOUTUSEC;
- 					setsockopt(sockreq,SOL_SOCKET,SO_RCVTIMEO,&tv,sizeof(tv));
- 					memset((char *)&reqaddr,0,sizeof(reqaddr));
- 					reqaddr.sin_family=AF_INET;
- 					reqaddr.sin_addr.s_addr=inet_addr(bkp2dns);
- 					reqaddr.sin_port=htons(53);
- 					sendto(sockreq,myarg->mesg,myarg->lenmesg,0,(struct sockaddr *)&reqaddr,sizeof(reqaddr));
- 					lenrecv=recvfrom(sockreq,recv,BUFMSG,0,NULL,NULL);
- 					close(sockreq);
- 				}
- 			}
- 		}
- 		
- 		// answer
- 		sendto(sockfd,recv,lenrecv,0,(struct sockaddr *)&myarg->cliaddr,sizeof(myarg->cliaddr));
- 	}
- 	
- 	free(recv);
-  free(auxbuf);
-  free(dominio);
-  return NULL;
+		else  {
+			// user whitelist
+			wlok=0;
+			if((query==1||query==28) && domsearch(myipclass[myclass].mywl,myipclass[myclass].nmywl,dominio))wlok=1;
+			// user blacklist
+			blok=0;
+			if(!wlok && (query==1||query==28) && domsearch(myipclass[myclass].mybl,myipclass[myclass].nmybl,dominio))blok=1;
+			// common black list
+			cblok=0;
+			if(!wlok && !blok && (query==1||query==28) && myipclass[myclass].bl && domsearch(commonblacklist,totcommonblacklist,dominio))cblok=1;
+			// set splash
+			if(cblok || blok){
+				myipclass[myclass].totfiltered++;
+				if(query==28)lenrecv=12+lenanswer+28;
+				else lenrecv=12+lenanswer+16;
+				if(lenrecv<BUFMSG){
+					recv[0]=*myarg->mesg; recv[1]=*(myarg->mesg+1); recv[2]=129; recv[3]=128; recv[4]=*(myarg->mesg+4); recv[5]=*(myarg->mesg+5); recv[6]=0; recv[7]=1; recv[8]=0; recv[9]=0; recv[10]=0; recv[11]=0;
+					memcpy(recv+12,myarg->mesg+12,lenanswer);
+					aux1=recv+12+lenanswer;
+					if(query==28){
+						aux1[0]=192; aux1[1]=12; aux1[2]=0; aux1[3]=28; aux1[4]=0; aux1[5]=1; aux1[6]=0; aux1[7]=0; aux1[8]=14; aux1[9]=16; aux1[10]=0; aux1[11]=16;
+						inet_pton(AF_INET6,ipv6splash,&(reqaddr6.sin6_addr));
+						memcpy(aux1+12,&reqaddr6.sin6_addr.s6_addr,16);
+					}
+					else {
+						aux1[0]=192; aux1[1]=12; aux1[2]=0; aux1[3]=1; aux1[4]=0; aux1[5]=1; aux1[6]=0; aux1[7]=0; aux1[8]=14; aux1[9]=16; aux1[10]=0; aux1[11]=4;
+						inet_pton(AF_INET,ipv4splash,&(reqaddr.sin_addr));
+						memcpy(aux1+12,&reqaddr.sin_addr.s_addr,4);
+					}
+				}
+			}
+			
+			// resolution
+			else {
+				sockreq=socket(AF_INET,SOCK_DGRAM,IPPROTO_UDP);
+				tv.tv_sec=0;
+				tv.tv_usec=TIMEOUTUSEC;
+				setsockopt(sockreq,SOL_SOCKET,SO_RCVTIMEO,&tv,sizeof(tv));
+				memset((char *)&reqaddr,0,sizeof(reqaddr));
+				reqaddr.sin_family=AF_INET;
+				reqaddr.sin_addr.s_addr=inet_addr(dnserver);
+				reqaddr.sin_port=htons(53);
+				sendto(sockreq,myarg->mesg,myarg->lenmesg,0,(struct sockaddr *)&reqaddr,sizeof(reqaddr));
+				lenrecv=recvfrom(sockreq,recv,BUFMSG,0,NULL,NULL);
+				close(sockreq);
+				if(lenrecv<1){
+					sockreq=socket(AF_INET,SOCK_DGRAM,IPPROTO_UDP);
+					tv.tv_sec=0;
+					tv.tv_usec=TIMEOUTUSEC;
+					setsockopt(sockreq,SOL_SOCKET,SO_RCVTIMEO,&tv,sizeof(tv));
+					memset((char *)&reqaddr,0,sizeof(reqaddr));
+					reqaddr.sin_family=AF_INET;
+					reqaddr.sin_addr.s_addr=inet_addr(bkp1dns);
+					reqaddr.sin_port=htons(53);
+					sendto(sockreq,myarg->mesg,myarg->lenmesg,0,(struct sockaddr *)&reqaddr,sizeof(reqaddr));
+					lenrecv=recvfrom(sockreq,recv,BUFMSG,0,NULL,NULL);
+					close(sockreq);
+				}
+				if(lenrecv<1){
+					sockreq=socket(AF_INET,SOCK_DGRAM,IPPROTO_UDP);
+					tv.tv_sec=0;
+					tv.tv_usec=TIMEOUTUSEC;
+					setsockopt(sockreq,SOL_SOCKET,SO_RCVTIMEO,&tv,sizeof(tv));
+					memset((char *)&reqaddr,0,sizeof(reqaddr));
+					reqaddr.sin_family=AF_INET;
+					reqaddr.sin_addr.s_addr=inet_addr(bkp2dns);
+					reqaddr.sin_port=htons(53);
+					sendto(sockreq,myarg->mesg,myarg->lenmesg,0,(struct sockaddr *)&reqaddr,sizeof(reqaddr));
+					lenrecv=recvfrom(sockreq,recv,BUFMSG,0,NULL,NULL);
+					close(sockreq);
+				}
+			}
+		}
+		
+		// answer
+		sendto(sockfd,recv,lenrecv,0,(struct sockaddr *)&myarg->cliaddr,sizeof(myarg->cliaddr));
+	}
+	
+	free(recv);
+	free(auxbuf);
+	free(dominio);
+	return NULL;
 }
 
 int main(int argc, char**argv){
