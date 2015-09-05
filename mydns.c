@@ -90,13 +90,13 @@ int mysearch(char **myvector,long lenvector,char *mylook){
 	int result,i;
 	zinit=0;
 	zend=lenvector-1;
-		for(i=0;i<MAXSTEPS;i++){
-  		zpos=(zinit+zend)/2;
-  		result=mystrcmp(&myvector[zpos],&mylook);
-  		if(result==0)return 1;
-  		if(result<0)zinit=zpos+1;
-  		else zend=zpos-1;
-  		if(zinit>zend||zinit>=lenvector||zend<0)break;
+	for(i=0;i<MAXSTEPS;i++){
+		zpos=(zinit+zend)/2;
+		result=mystrcmp(&myvector[zpos],&mylook);
+		if(result==0)return 1;
+		if(result<0)zinit=zpos+1;
+		else zend=zpos-1;
+		if(zinit>zend||zinit>=lenvector||zend<0)break;
 	}
 	return 0;
 }
@@ -111,10 +111,10 @@ long myipsearch(unsigned long ip_tocheck){
 	for(i=0;i<MAXSTEPS;i++){
 		myclass=(zinit+zend)/2;
 		ip_mask=mymask[myipclass[myclass].cidr];
-  		if((ip_tocheck&ip_mask)==myipclass[myclass].ipv4)break;
-  		if((ip_tocheck&ip_mask)>myipclass[myclass].ipv4)zinit=myclass+1;
-  		else zend=myclass-1;
-  		if(zinit>zend||zinit>=totipclass||zend<0)return -1;
+		if((ip_tocheck&ip_mask)==myipclass[myclass].ipv4)break;
+		if((ip_tocheck&ip_mask)>myipclass[myclass].ipv4)zinit=myclass+1;
+		else zend=myclass-1;
+		if(zinit>zend||zinit>=totipclass||zend<0)return -1;
 	}
 	return myclass;
 }
