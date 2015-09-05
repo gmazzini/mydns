@@ -1,5 +1,5 @@
 // mydns v1.09 2015 by GM
-// changelog (appears on githib since v1.08)
+// changelog (appears on github since v1.08)
 // v1.09 totallquery inserter and status with comma separated format
 // v1.08 double backup dns query with 200ms timeout and separate boot & conf file
 // v1.07 backup dns query to 8.8.8.8 with 200ms timeout  
