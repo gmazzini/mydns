@@ -418,7 +418,8 @@ void *manage(void *arg_void){
 							}
 							// status
 							else if(strcmp(aux2,"status")==0){
-								sprintf(auxbuf,"start=%s totmalformed=%lu totoutscope=%lu",cstarttime,totmalformed,totoutscope);
+								totmalformed=2345;
+								sprintf(auxbuf,"start=%s totmalformed=%'lu totoutscope=%lu",cstarttime,totmalformed,totoutscope);
 							}
 							// unknown
 							else sprintf(auxbuf,"command unknown");
