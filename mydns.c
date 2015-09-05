@@ -1,4 +1,5 @@
 // mydns v1.08 2015 by GM
+// changelog
 // v1.08 double backup dns query with 200ms timeout and separate boot & conf file
 // v1.07 backup dns query to 8.8.8.8 with 200ms timeout  
 // v1.06 200ms timeout during dns query to avoid thread stale
@@ -141,11 +142,11 @@ void myloadcommonblacklist(){
 
 // ip class files reading
 void myconfig(){
-	FILE *fp;
+  FILE *fp;
   char *auxbuf,*auxwl,*auxbl,*aux,*auxi;
   struct sockaddr_in netip;
   int i,j;
-
+  
   auxbuf=(char *)malloc(BUFMSG*sizeof(char));
   auxwl=(char *)malloc(BUFMSG*sizeof(char));
   auxbl=(char *)malloc(BUFMSG*sizeof(char));
@@ -211,7 +212,7 @@ void myconfig(){
 
 // domain search with maximum deep to avoid loops for not termination
 int domsearch(char **myvector,long lenvector,char *mydom){
-	char *aux;
+  char *aux;
   int i;
   if(lenvector==0)return 0;
   i=0; 
@@ -532,7 +533,7 @@ int main(int argc, char**argv){
   long pos;
   struct tm *loctime;
   FILE *fp;
-
+  
   // initialization
   totmalformed=totoutscope=0;
   tid=(pthread_t *)malloc(NTHREAD*sizeof(pthread_t));
@@ -544,18 +545,17 @@ int main(int argc, char**argv){
   myargs=(struct arg_pass *)malloc(NTHREAD*sizeof(struct arg_pass));
   for(i=0;i<NTHREAD;i++)myargs[i].mesg=(char *)malloc(BUFMSG*sizeof(char));
   for(i=0;i<=32;i++)mymask[i]=~((1<<(32-i))-1);
-
+  
   // boot configuration file
   fp=fopen(BOOTCONFIG,"rt");
   fscanf(fp,"%d %s %s %s %s %s %s",&listenport,dnserver,bkp1dns,bkp2dns,mypassword,ipv4splash,ipv6splash);
   fclose(fp);
-
   myconfig();
   myloadcommonblacklist();
-
+  
   myprofile=(unsigned long *)malloc(IPTOT*sizeof(unsigned long));
   for(pos=0;pos<IPTOT;pos++)myprofile[pos]=0;
-
+  
   // bindind
   sockfd=socket(AF_INET,SOCK_DGRAM,IPPROTO_UDP);
   memset((char *)&servaddr,0,sizeof(servaddr));
