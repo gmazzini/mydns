@@ -212,23 +212,23 @@ void myconfig(){
 
 // domain search with maximum deep to avoid loops for not termination
 int domsearch(char **myvector,long lenvector,char *mydom){
-  char *aux;
-  int i;
-  if(lenvector==0)return 0;
-  i=0; 
-  aux=mydom;
-  for(;;){
-  	if(mysearch(myvector,lenvector,aux)==1)return 1;
-  	for(;;){
-  		if(*aux=='\0' || i>=BUFMSG)return 0;
-  		if(*aux=='.' && i+1<BUFMSG){
-  			aux++;
-  			break;
-  		}
-  		aux++;
-  		i++;
-  	}
-  }
+	char *aux;
+	int i;
+	if(lenvector==0)return 0;
+	i=0;
+	aux=mydom;
+	for(;;){
+		if(mysearch(myvector,lenvector,aux)==1)return 1;
+		for(;;){
+			if(*aux=='\0' || i>=BUFMSG)return 0;
+			if(*aux=='.' && i+1<BUFMSG){
+				aux++;
+				break;
+			}
+		}
+		aux++;
+		i++;
+	}
 }
 
 void *manage(void *arg_void){
@@ -526,50 +526,51 @@ void *manage(void *arg_void){
 }
 
 int main(int argc, char**argv){
-  struct arg_pass *myargs;
-  int lenmesg,i,j;
-  struct sockaddr_in servaddr,cliaddr;
-  socklen_t len;
-  long pos;
-  struct tm *loctime;
-  FILE *fp;
-  
-  // initialization
-  totmalformed=totoutscope=0;
-  tid=(pthread_t *)malloc(NTHREAD*sizeof(pthread_t));
-  commonblacklist=(char **)malloc(NCOMMONBLACKLIST*sizeof(char *));
-  setlocale(LC_NUMERIC,"");
-  starttime=time(NULL);
-  loctime=localtime(&starttime);
-  strftime(cstarttime,30,"%Y%m%dT%H%M%S",loctime);
-  myargs=(struct arg_pass *)malloc(NTHREAD*sizeof(struct arg_pass));
-  for(i=0;i<NTHREAD;i++)myargs[i].mesg=(char *)malloc(BUFMSG*sizeof(char));
-  for(i=0;i<=32;i++)mymask[i]=~((1<<(32-i))-1);
-  
-  // boot configuration file
-  fp=fopen(BOOTCONFIG,"rt");
-  fscanf(fp,"%d %s %s %s %s %s %s",&listenport,dnserver,bkp1dns,bkp2dns,mypassword,ipv4splash,ipv6splash);
-  fclose(fp);
-  myconfig();
-  myloadcommonblacklist();
-  
-  myprofile=(unsigned long *)malloc(IPTOT*sizeof(unsigned long));
-  for(pos=0;pos<IPTOT;pos++)myprofile[pos]=0;
-  
-  // bindind
-  sockfd=socket(AF_INET,SOCK_DGRAM,IPPROTO_UDP);
-  memset((char *)&servaddr,0,sizeof(servaddr));
-  servaddr.sin_family=AF_INET;
-  servaddr.sin_addr.s_addr=htonl(INADDR_ANY);
-  servaddr.sin_port=htons(listenport);
-  bind(sockfd,(struct sockaddr *)&servaddr,sizeof(servaddr));
-  
-  len=sizeof(cliaddr);
-  for(j=0;;){
-  	// receive request and launch a processing thread
-  	myargs[j].lenmesg=recvfrom(sockfd,myargs[j].mesg,BUFMSG,0,(struct sockaddr *)&myargs[j].cliaddr,&len);
-  	pthread_create(&(tid[j]),NULL,&manage,&myargs[j]);
-  	pthread_detach(tid[j]);
-  	if(++j==NTHREAD)j=0;
-  }
+	struct arg_pass *myargs;
+	int lenmesg,i,j;
+	struct sockaddr_in servaddr,cliaddr;
+	socklen_t len;
+	long pos;
+	struct tm *loctime;
+	FILE *fp;
+	
+	// initialization
+	totmalformed=totoutscope=0;
+	tid=(pthread_t *)malloc(NTHREAD*sizeof(pthread_t));
+	commonblacklist=(char **)malloc(NCOMMONBLACKLIST*sizeof(char *));
+	setlocale(LC_NUMERIC,"");
+	starttime=time(NULL);
+	loctime=localtime(&starttime);
+	strftime(cstarttime,30,"%Y%m%dT%H%M%S",loctime);
+	myargs=(struct arg_pass *)malloc(NTHREAD*sizeof(struct arg_pass));
+	for(i=0;i<NTHREAD;i++)myargs[i].mesg=(char *)malloc(BUFMSG*sizeof(char));
+	for(i=0;i<=32;i++)mymask[i]=~((1<<(32-i))-1);
+	myprofile=(unsigned long *)malloc(IPTOT*sizeof(unsigned long));
+	for(pos=0;pos<IPTOT;pos++)myprofile[pos]=0;
+	
+	// boot configuration file
+	fp=fopen(BOOTCONFIG,"rt");
+	fscanf(fp,"%d %s %s %s %s %s %s",&listenport,dnserver,bkp1dns,bkp2dns,mypassword,ipv4splash,ipv6splash);
+	fclose(fp);
+	
+	// loading configuration file and common black list
+	myconfig();
+	myloadcommonblacklist();
+	
+	// bindind
+	sockfd=socket(AF_INET,SOCK_DGRAM,IPPROTO_UDP);
+	memset((char *)&servaddr,0,sizeof(servaddr));
+	servaddr.sin_family=AF_INET;
+	servaddr.sin_addr.s_addr=htonl(INADDR_ANY);
+	servaddr.sin_port=htons(listenport);
+	bind(sockfd,(struct sockaddr *)&servaddr,sizeof(servaddr));
+	len=sizeof(cliaddr);
+	
+	for(j=0;;){
+		// receive request and launch a processing thread
+		myargs[j].lenmesg=recvfrom(sockfd,myargs[j].mesg,BUFMSG,0,(struct sockaddr *)&myargs[j].cliaddr,&len);
+		pthread_create(&(tid[j]),NULL,&manage,&myargs[j]);
+		pthread_detach(tid[j]);
+		if(++j==NTHREAD)j=0;
+	}
 }
