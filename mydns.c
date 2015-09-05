@@ -399,44 +399,43 @@ void *manage(void *arg_void){
 							}
 							// stat
 							else if(strcmp(aux2,"stats")==0){
- 								for(aux2=++aux1;*aux1!='\0';aux1++)if(*aux1=='/')break;
- 								if(*aux1=='\0')sprintf(auxbuf,"missed IP");
- 								else {
- 									*aux1='\0';
- 									inet_pton(AF_INET,aux2,&(netip.sin_addr));
- 									ipsrcaddr=ntohl(netip.sin_addr.s_addr);
- 									mystatus=myipsearch(ipsrcaddr);
- 									if(mystatus==-1)sprintf(auxbuf,"IP not configured");
- 									else {
- 										curtime=time(NULL);
- 										myuptime=difftime(curtime,starttime);
- 										ipsrcaddr=htonl(myipclass[mystatus].ipv4);
- 										inet_ntop(AF_INET,&ipsrcaddr,ipbuf,sizeof(ipbuf));
- 										sprintf(auxbuf,"IPnet=%s/%d id=%s uptime=%.0lf totquery=%lu filtered=%lu",ipbuf,myipclass[mystatus].cidr,myipclass[mystatus].id,myuptime,myipclass[mystatus].totquery,myipclass[mystatus].totfiltered);
- 									}
- 								}
- 							}
- 							// status
- 							else if(strcmp(aux2,"status")==0){
- 								sprintf(auxbuf,"start=%s totmalformed=%lu totoutscope=%lu",cstarttime,totmalformed,totoutscope);
- 							}
- 							// unknown
- 							else sprintf(auxbuf,"command unknown");
- 						}
- 					}
- 				}
- 			}
- 			
- 			lenaux=strlen(auxbuf);
- 			lenrecv=12+lenanswer+13+lenaux;
- 			if(lenrecv<BUFMSG){
- 				recv[0]=*myarg->mesg; recv[1]=*(myarg->mesg+1); recv[2]=129; recv[3]=128; recv[4]=*(myarg->mesg+4); recv[5]=*(myarg->mesg+5); recv[6]=0; recv[7]=1; recv[8]=0; recv[9]=0; recv[10]=0; recv[11]=0;
- 				memcpy(recv+12,myarg->mesg+12,lenanswer);
- 				aux1=recv+12+lenanswer;
- 				aux1[0]=192; aux1[1]=12; aux1[2]=0; aux1[3]=16; aux1[4]=0; aux1[5]=1; aux1[6]=0; aux1[7]=0; aux1[8]=14; aux1[9]=16; aux1[10]=0; aux1[12]=lenaux; aux1[11]=aux1[12]+1;
- 				memcpy(aux1+13,auxbuf,lenaux);
- 			}
- 		}
+								for(aux2=++aux1;*aux1!='\0';aux1++)if(*aux1=='/')break;
+								if(*aux1=='\0')sprintf(auxbuf,"missed IP");
+								else {
+									*aux1='\0';
+									inet_pton(AF_INET,aux2,&(netip.sin_addr));
+									ipsrcaddr=ntohl(netip.sin_addr.s_addr);
+									mystatus=myipsearch(ipsrcaddr);
+									if(mystatus==-1)sprintf(auxbuf,"IP not configured");
+									else {
+										curtime=time(NULL);
+										myuptime=difftime(curtime,starttime);
+										ipsrcaddr=htonl(myipclass[mystatus].ipv4);
+										inet_ntop(AF_INET,&ipsrcaddr,ipbuf,sizeof(ipbuf));
+										sprintf(auxbuf,"IPnet=%s/%d id=%s uptime=%.0lf totquery=%lu filtered=%lu",ipbuf,myipclass[mystatus].cidr,myipclass[mystatus].id,myuptime,myipclass[mystatus].totquery,myipclass[mystatus].totfiltered);
+									}
+								}
+							}
+							// status
+							else if(strcmp(aux2,"status")==0){
+								sprintf(auxbuf,"start=%s totmalformed=%lu totoutscope=%lu",cstarttime,totmalformed,totoutscope);
+							}
+							// unknown
+							else sprintf(auxbuf,"command unknown");
+						}
+					}
+				}
+			}
+			lenaux=strlen(auxbuf);
+			lenrecv=12+lenanswer+13+lenaux;
+			if(lenrecv<BUFMSG){
+				recv[0]=*myarg->mesg; recv[1]=*(myarg->mesg+1); recv[2]=129; recv[3]=128; recv[4]=*(myarg->mesg+4); recv[5]=*(myarg->mesg+5); recv[6]=0; recv[7]=1; recv[8]=0; recv[9]=0; recv[10]=0; recv[11]=0;
+				memcpy(recv+12,myarg->mesg+12,lenanswer);
+				aux1=recv+12+lenanswer;
+				aux1[0]=192; aux1[1]=12; aux1[2]=0; aux1[3]=16; aux1[4]=0; aux1[5]=1; aux1[6]=0; aux1[7]=0; aux1[8]=14; aux1[9]=16; aux1[10]=0; aux1[12]=lenaux; aux1[11]=aux1[12]+1;
+				memcpy(aux1+13,auxbuf,lenaux);
+			}
+		}
  		
  		else  {
  			// user whitelist
