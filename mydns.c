@@ -359,46 +359,46 @@ void *manage(void *arg_void){
 									}
 								}
 							}
-  						// delete
-  						else if(strcmp(aux2,"delete")==0){
-  							for(aux2=++aux1;*aux1!='\0';aux1++)if(*aux1=='/')break;
-  							if(*aux1=='\0')sprintf(auxbuf,"missed source IP");
-  							else {
-  								*aux1='\0';
-  								// check ipsrc inside 10.32.0.0/12
-  								inet_pton(AF_INET,aux2,&(netip.sin_addr));
-  								ipsrcaddr=ntohl(netip.sin_addr.s_addr);
-  								if((ipsrcaddr&IPMASK12)!=IPCLASS)sprintf(auxbuf,"wrong source IP");
-  								else {
-  									ipidx=ipsrcaddr-IPCLASS;
-  									myprofile[ipidx]=0;
- 										sprintf(auxbuf,"user profile removed");
- 									}
-  							}
-  						}
-  						// class
-  						else if(strcmp(aux2,"class")==0){
-  							for(aux2=++aux1;*aux1!='\0';aux1++)if(*aux1=='/')break;
-  							if(*aux1=='\0')sprintf(auxbuf,"missed source IP");
-  							else {
-  								*aux1='\0';
-  								// check ipsrc inside 10.32.0.0/12
-  								inet_pton(AF_INET,aux2,&(netip.sin_addr));
-  								ipsrcaddr=ntohl(netip.sin_addr.s_addr);
-  								if((ipsrcaddr&IPMASK12)!=IPCLASS)sprintf(auxbuf,"wrong source IP");
-  								else {
- 										ipidx=ipsrcaddr-IPCLASS;
-  									if(myprofile[ipidx]==0)sprintf(auxbuf,"user profile IP %s without class",aux2);
-  									else {
-  										ipclassaddr=htonl(myprofile[ipidx]);
-  										inet_ntop(AF_INET,&ipclassaddr,ipbuf,sizeof(ipbuf));
-  										sprintf(auxbuf,"user profile IP %s into class %s",aux2,ipbuf);
-  									}
-  								}
- 								}
- 							}
- 							// stat
- 							else if(strcmp(aux2,"stats")==0){
+							// delete
+							else if(strcmp(aux2,"delete")==0){
+								for(aux2=++aux1;*aux1!='\0';aux1++)if(*aux1=='/')break;
+								if(*aux1=='\0')sprintf(auxbuf,"missed source IP");
+								else {
+									*aux1='\0';
+									// check ipsrc inside 10.32.0.0/12
+									inet_pton(AF_INET,aux2,&(netip.sin_addr));
+									ipsrcaddr=ntohl(netip.sin_addr.s_addr);
+									if((ipsrcaddr&IPMASK12)!=IPCLASS)sprintf(auxbuf,"wrong source IP");
+									else {
+										ipidx=ipsrcaddr-IPCLASS;
+										myprofile[ipidx]=0;
+										sprintf(auxbuf,"user profile removed");
+									}
+								}
+							}
+							// class
+							else if(strcmp(aux2,"class")==0){
+								for(aux2=++aux1;*aux1!='\0';aux1++)if(*aux1=='/')break;
+								if(*aux1=='\0')sprintf(auxbuf,"missed source IP");
+								else {
+									*aux1='\0';
+									// check ipsrc inside 10.32.0.0/12
+									inet_pton(AF_INET,aux2,&(netip.sin_addr));
+									ipsrcaddr=ntohl(netip.sin_addr.s_addr);
+									if((ipsrcaddr&IPMASK12)!=IPCLASS)sprintf(auxbuf,"wrong source IP");
+									else {
+										ipidx=ipsrcaddr-IPCLASS;
+										if(myprofile[ipidx]==0)sprintf(auxbuf,"user profile IP %s without class",aux2);
+										else {
+											ipclassaddr=htonl(myprofile[ipidx]);
+											inet_ntop(AF_INET,&ipclassaddr,ipbuf,sizeof(ipbuf));
+											sprintf(auxbuf,"user profile IP %s into class %s",aux2,ipbuf);
+										}
+									}
+								}
+							}
+							// stat
+							else if(strcmp(aux2,"stats")==0){
  								for(aux2=++aux1;*aux1!='\0';aux1++)if(*aux1=='/')break;
  								if(*aux1=='\0')sprintf(auxbuf,"missed IP");
  								else {
