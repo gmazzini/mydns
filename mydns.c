@@ -297,68 +297,68 @@ void *manage(void *arg_void){
 		if(i==0)*aux1='\0';
 		else *(--aux1)='\0';
 	}
-  
-  // request analisys
-  if(!mystop){
-  	myipclass[myclass].totquery++;
-  	
-  	// query type
-  	query=*(aux2+2);
-  	lenanswer+=5;
-  	
-  	// command processing
-  	if(query==16 && strncmp(dominio,"cmd",3)==0){
-  		for(aux1=dominio;*aux1!='\0';aux1++)if(*aux1=='/')break;
-  		if(*aux1=='\0')sprintf(auxbuf,"request malfomed");
-  		else {
-  			for(aux2=++aux1;*aux1!='\0';aux1++)if(*aux1=='/')break;
-  			if(*aux1=='\0')sprintf(auxbuf,"missed password");
-  			else {
-  				*aux1='\0';
-  				if(strcmp(aux2,mypassword)!=0)sprintf(auxbuf,"wrong password");
-  				else {
-  					for(aux2=++aux1;*aux1!='\0';aux1++)if(*aux1=='/')break;
-  					if(*aux1=='\0')sprintf(auxbuf,"missed command");
-  					else {
-  						*aux1='\0';
-  						// reload configuration
-  						if(strcmp(aux2,"reload")==0){
-  							myconfig();
-  							sprintf(auxbuf,"configuration reloaded");
-  						}
-  						// reload common black list
-  						else if(strcmp(aux2,"recbl")==0){
-  							myloadcommonblacklist();
-  							sprintf(auxbuf,"common black list reloaded");
-  						}
-  						// insert
-  						else if(strcmp(aux2,"insert")==0){
-  							for(aux2=++aux1;*aux1!='\0';aux1++)if(*aux1=='/')break;
-  							if(*aux1=='\0')sprintf(auxbuf,"missed source IP");
-  							else {
-  								*aux1='\0';
-  								// check ipsrc inside 10.32.0.0/12
-  								inet_pton(AF_INET,aux2,&(netip.sin_addr));
-  								ipsrcaddr=ntohl(netip.sin_addr.s_addr);
-  								if((ipsrcaddr&IPMASK12)!=IPCLASS)sprintf(auxbuf,"wrong source IP");
-  								else {
-  									ipidx=ipsrcaddr-IPCLASS;
-  									for(aux2=++aux1;*aux1!='\0';aux1++)if(*aux1=='/')break;
-  									if(*aux1=='\0')sprintf(auxbuf,"missed profile IP");
-  									else {
-  										*aux1='\0';
-  										// check ipprof inside 127.127.0.0/16
-  										inet_pton(AF_INET,aux2,&(netip.sin_addr));
-  										ipprofaddr=ntohl(netip.sin_addr.s_addr);
-  										if((ipprofaddr&IPMASK16)!=IPPROF)sprintf(auxbuf,"wrong profile IP");
-  										else {
-  											myprofile[ipidx]=ipprofaddr;
-  											sprintf(auxbuf,"user profile inserted");
-  										}
-  									}
-  								}
-  							}
-  						}
+	
+	// request analisys
+	if(!mystop){
+		myipclass[myclass].totquery++;
+		
+		// query type
+		query=*(aux2+2);
+		lenanswer+=5;
+		
+		// command processing
+		if(query==16 && strncmp(dominio,"cmd",3)==0){
+			for(aux1=dominio;*aux1!='\0';aux1++)if(*aux1=='/')break;
+			if(*aux1=='\0')sprintf(auxbuf,"request malfomed");
+			else {
+				for(aux2=++aux1;*aux1!='\0';aux1++)if(*aux1=='/')break;
+				if(*aux1=='\0')sprintf(auxbuf,"missed password");
+				else {
+					*aux1='\0';
+					if(strcmp(aux2,mypassword)!=0)sprintf(auxbuf,"wrong password");
+					else {
+						for(aux2=++aux1;*aux1!='\0';aux1++)if(*aux1=='/')break;
+						if(*aux1=='\0')sprintf(auxbuf,"missed command");
+						else {
+							*aux1='\0';
+							// reload configuration
+							if(strcmp(aux2,"reload")==0){
+								myconfig();
+								sprintf(auxbuf,"configuration reloaded");
+							}
+							// reload common black list
+							else if(strcmp(aux2,"recbl")==0){
+								myloadcommonblacklist();
+								sprintf(auxbuf,"common black list reloaded");
+							}
+							// insert
+							else if(strcmp(aux2,"insert")==0){
+								for(aux2=++aux1;*aux1!='\0';aux1++)if(*aux1=='/')break;
+								if(*aux1=='\0')sprintf(auxbuf,"missed source IP");
+								else {
+									*aux1='\0';
+									// check ipsrc inside 10.32.0.0/12
+									inet_pton(AF_INET,aux2,&(netip.sin_addr));
+									ipsrcaddr=ntohl(netip.sin_addr.s_addr);
+									if((ipsrcaddr&IPMASK12)!=IPCLASS)sprintf(auxbuf,"wrong source IP");
+									else {
+										ipidx=ipsrcaddr-IPCLASS;
+										for(aux2=++aux1;*aux1!='\0';aux1++)if(*aux1=='/')break;
+										if(*aux1=='\0')sprintf(auxbuf,"missed profile IP");
+										else {
+											*aux1='\0';
+											// check ipprof inside 127.127.0.0/16
+											inet_pton(AF_INET,aux2,&(netip.sin_addr));
+											ipprofaddr=ntohl(netip.sin_addr.s_addr);
+											if((ipprofaddr&IPMASK16)!=IPPROF)sprintf(auxbuf,"wrong profile IP");
+											else {
+												myprofile[ipidx]=ipprofaddr;
+												sprintf(auxbuf,"user profile inserted");
+											}
+										}
+									}
+								}
+							}
   						// delete
   						else if(strcmp(aux2,"delete")==0){
   							for(aux2=++aux1;*aux1!='\0';aux1++)if(*aux1=='/')break;
