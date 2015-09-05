@@ -1,5 +1,5 @@
 # mydns
-written by Gianluca Mazzini ginaluca@mazzini.org
+written by Gianluca Mazzini gianluca@mazzini.org
 started in 2015
 
 dns filtering with blacklist, whitelist, common black list and profilation
