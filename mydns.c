@@ -45,19 +45,19 @@
 struct arg_pass {
 	char *mesg;
 	int lenmesg;
-  struct sockaddr_in cliaddr;
+	struct sockaddr_in cliaddr;
 };
 struct ip_class {
-  unsigned long ipv4;
-  int cidr;
-  char id[50];
-  unsigned long totquery;
-  unsigned long totfiltered;
-  int bl;
-  char **mywl;
-  int nmywl;
-  char **mybl;
-  int nmybl;
+	unsigned long ipv4;
+	int cidr;
+	char id[50];
+	unsigned long totquery;
+	unsigned long totfiltered;
+	int bl;
+	char **mywl;
+	int nmywl;
+	char **mybl;
+	int nmybl;
 };
 
 pthread_t *tid;
@@ -79,65 +79,65 @@ static int mystrcmp(const void *p1, const void *p2){
 }
 static int myipcmp(const void *p1, const void *p2){
 	long ret;
-  ret=((struct ip_class *)p1)->ipv4-((struct ip_class*)p2)->ipv4;
-  if(ret==0)return 0;
-  return (ret>0)?1:-1;
+	ret=((struct ip_class *)p1)->ipv4-((struct ip_class*)p2)->ipv4;
+	if(ret==0)return 0;
+	return (ret>0)?1:-1;
 }
 
 // Binary search with maximum steps for generic ordered search
 int mysearch(char **myvector,long lenvector,char *mylook){
-  long zinit,zend,zpos;
-  int result,i;
-  zinit=0;
-  zend=lenvector-1;
-  for(i=0;i<MAXSTEPS;i++){
-  	zpos=(zinit+zend)/2;
-  	result=mystrcmp(&myvector[zpos],&mylook);
-  	if(result==0)return 1;
-  	if(result<0)zinit=zpos+1;
-  	else zend=zpos-1;
-  	if(zinit>zend||zinit>=lenvector||zend<0)break;
-  }
-  return 0;
+	long zinit,zend,zpos;
+	int result,i;
+	zinit=0;
+	zend=lenvector-1;
+		for(i=0;i<MAXSTEPS;i++){
+  		zpos=(zinit+zend)/2;
+  		result=mystrcmp(&myvector[zpos],&mylook);
+  		if(result==0)return 1;
+  		if(result<0)zinit=zpos+1;
+  		else zend=zpos-1;
+  		if(zinit>zend||zinit>=lenvector||zend<0)break;
+	}
+	return 0;
 }
 
 // Binary search with maximum steps for ipclass search
 long myipsearch(unsigned long ip_tocheck){
-  long zinit,zend,myclass;
-  unsigned long ip_mask;
-  int i;
-  zinit=0;
-  zend=totipclass-1;
-  for(i=0;i<MAXSTEPS;i++){
-  	myclass=(zinit+zend)/2;
-  	ip_mask=mymask[myipclass[myclass].cidr];
-  	if((ip_tocheck&ip_mask)==myipclass[myclass].ipv4)break;
-  	if((ip_tocheck&ip_mask)>myipclass[myclass].ipv4)zinit=myclass+1;
-  	else zend=myclass-1;
-  	if(zinit>zend||zinit>=totipclass||zend<0)return -1;
-  }
-  return myclass;
+	long zinit,zend,myclass;
+	unsigned long ip_mask;
+	int i;
+	zinit=0;
+	zend=totipclass-1;
+	for(i=0;i<MAXSTEPS;i++){
+		myclass=(zinit+zend)/2;
+		ip_mask=mymask[myipclass[myclass].cidr];
+  		if((ip_tocheck&ip_mask)==myipclass[myclass].ipv4)break;
+  		if((ip_tocheck&ip_mask)>myipclass[myclass].ipv4)zinit=myclass+1;
+  		else zend=myclass-1;
+  		if(zinit>zend||zinit>=totipclass||zend<0)return -1;
+	}
+	return myclass;
 }
 
 // common black list file reading
 void myloadcommonblacklist(){
-  long i;
-  char *auxbuf;
-  FILE *fp;
-  auxbuf=(char *)malloc(BUFMSG*sizeof(char));
-  for(i=0;i<totcommonblacklist;i++)free(commonblacklist[i]);
-  totcommonblacklist=0;
-  fp=fopen(FILECOMMONBLACKLIST,"rt");
-  for(totcommonblacklist=0;;){
-  	fscanf(fp,"%s",auxbuf);
-  	commonblacklist[totcommonblacklist]=(char *)malloc((strlen(auxbuf)+1)*sizeof(char));
-  	strcpy(commonblacklist[totcommonblacklist],auxbuf);
-  	if(feof(fp))break;
-  	totcommonblacklist++;
-  }
-  fclose(fp);
-  qsort(commonblacklist,totcommonblacklist,sizeof(char *),mystrcmp);
-  free(auxbuf);
+	long i;
+	char *auxbuf;
+	FILE *fp;
+	auxbuf=(char *)malloc(BUFMSG*sizeof(char));
+	for(i=0;i<totcommonblacklist;i++)free(commonblacklist[i]);
+	totcommonblacklist=0;
+	fp=fopen(FILECOMMONBLACKLIST,"rt");
+	for(totcommonblacklist=0;;){
+		fscanf(fp,"%s",auxbuf);
+		commonblacklist[totcommonblacklist]=(char *)malloc((strlen(auxbuf)+1)*sizeof(char));
+		strcpy(commonblacklist[totcommonblacklist],auxbuf);
+		if(feof(fp))break;
+		totcommonblacklist++;
+	}
+	fclose(fp);
+	qsort(commonblacklist,totcommonblacklist,sizeof(char *),mystrcmp);
+	free(auxbuf);
 }
 
 // ip class files reading
