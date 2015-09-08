@@ -22,13 +22,14 @@ to compile the daemon please consider the makefile example and kust use make
 
 command may be given by usung a dns query with TXT mode and the password in mydns.boot configuration file, in the following the password example is xxxxx
 example of command is dig @127.0.0.1 +short -t TXT cmd/xxxxx/stats/10.32.4.0/
+
 list of commands
 
 cmd/xxxxx/reload/ for runtime mydns.conf reloading
 
 cmd/xxxxx/recbl/ for runtime commonblacklist reloading
 
-cmd/xxxxx/stats/<ipv4>/ to obtain for such an IP, the reference class as ipv4/cidr, the id, the number of query processed and filtered
+cmd/xxxxx/stats/&lt;ipv4&gt;/ to obtain for such an ipv4, the reference class as ipv4/cidr, the id, the number of query processed and filtered
 
 cmd/xxxxx/status/ to obtain the demon uptime and the number of query malformed and outofscope (ie. with ipv4 address not in mydns.conf)
 
