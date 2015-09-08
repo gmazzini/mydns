@@ -452,8 +452,9 @@ void *manage(void *arg_void){
 			printf("3\n"); fflush(stdout);
 			if(!wlok && !blok && (query==1||query==28) && myipclass[myclass].bl && domsearch(commonblacklist,totcommonblacklist,dominio))cblok=1;
 			// set splash
+			printf("4\n"); fflush(stdout);
 			if(cblok || blok){
-				printf("4\n"); fflush(stdout);
+				printf("5\n"); fflush(stdout);
 				myipclass[myclass].totfiltered++;
 				if(query==28)lenrecv=12+lenanswer+28;
 				else lenrecv=12+lenanswer+16;
