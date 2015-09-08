@@ -227,11 +227,12 @@ int domsearch(char **myvector,long lenvector,char *mydom){
 			if(*aux=='\0' || i>=BUFMSG)return 0;
 			if(*aux=='.' && i+1<BUFMSG){
 				aux++;
+				i++;
 				break;
 			}
+			aux++;
+			i++;
 		}
-		aux++;
-		i++;
 	}
 	printf("mysearch exit\n"); fflush(stdout);
 }
