@@ -439,7 +439,6 @@ void *manage(void *arg_void){
 			}
 		}
 		else  {
-			printf("entra\n"); fflush(stdout);
 			// user whitelist
 			wlok=0;
 			if((query==1||query==28) && domsearch(myipclass[myclass].mywl,myipclass[myclass].nmywl,dominio))wlok=1;
@@ -451,7 +450,7 @@ void *manage(void *arg_void){
 			if(!wlok && !blok && (query==1||query==28) && myipclass[myclass].bl && domsearch(commonblacklist,totcommonblacklist,dominio))cblok=1;
 			// set splash
 			if(cblok || blok){
-				printf("qq\n");
+				printf("qq\n"); fflush(stdout);
 				myipclass[myclass].totfiltered++;
 				if(query==28)lenrecv=12+lenanswer+28;
 				else lenrecv=12+lenanswer+16;
