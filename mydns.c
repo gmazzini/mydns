@@ -450,7 +450,7 @@ void *manage(void *arg_void){
 			// common black list
 			cblok=0;
 			printf("3\n"); fflush(stdout);
-			if(!wlok && !blok && (query==1||query==28) && myipclass[myclass].bl && domsearch(commonblacklist,totcommonblacklist,dominio))cblok=1;
+			// if(!wlok && !blok && (query==1||query==28) && myipclass[myclass].bl && domsearch(commonblacklist,totcommonblacklist,dominio))cblok=1;
 			// set splash
 			printf("4\n"); fflush(stdout);
 			if(cblok || blok){
