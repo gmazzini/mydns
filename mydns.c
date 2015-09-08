@@ -215,6 +215,7 @@ void myconfig(){
 int domsearch(char **myvector,long lenvector,char *mydom){
 	char *aux;
 	int i;
+	printf("mysearch %ld\n",lenvector); fflush(stdout);
 	if(lenvector==0)return 0;
 	i=0;
 	aux=mydom;
