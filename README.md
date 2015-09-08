@@ -20,21 +20,21 @@ mydns support profilation for a single ipv4, where ipv4 must be in the range 10.
 
 to compile the daemon please consider the makefile example and kust use make
 
-command may be given by usung a dns query with TXT mode and the password in mydns.boot configuration file, in the following the password example is xxxxx
+command may be given by usung a dns query with TXT mode and the password in mydns.boot configuration file, in the following example the password is set to xxxxx
 example of command is dig @127.0.0.1 +short -t TXT cmd/xxxxx/stats/10.32.4.0/
 
 list of commands
 
-cmd/xxxxx/reload/ for runtime mydns.conf reloading
+cmd/&lt;password&gt;/reload/ for runtime mydns.conf reloading
 
-cmd/xxxxx/recbl/ for runtime commonblacklist reloading
+cmd/&lt;password&gt;/recbl/ for runtime commonblacklist reloading
 
-cmd/xxxxx/stats/&lt;ipv4&gt;/ to obtain for such an ipv4, the reference class as ipv4/cidr, the id, the number of query processed and filtered
+cmd/&lt;password&gt;/stats/&lt;ipv4&gt;/ to obtain for such an ipv4, the reference class as ipv4/cidr, the id, the number of query processed and filtered
 
-cmd/xxxxx/status/ to obtain the demon uptime and the number of query malformed and outofscope (ie. with ipv4 address not in mydns.conf)
+cmd/&lt;password&gt;/status/ to obtain the demon uptime and the number of query malformed and outofscope (ie. with ipv4 address not in mydns.conf)
 
-cmd/xxxxx/insert/<ipv4>/127.127.A.B/ to insert the IP in the 127.127.A.B/32 class, note that ipv4 address must be in the range 10.32.0.0/12
+cmd/&lt;password&gt;/insert/&lt;ipv4&gt;/127.127.A.B/ to insert the IP in the 127.127.A.B/32 class, note that ipv4 address must be in the range 10.32.0.0/12
 
-cmd/xxxxx/delete/<ipv4>/ to delete the eventually present profilation for such an ipv4
+cmd/&lt;password&gt;/delete/&lt;ipv4&gt;/ to delete the eventually present profilation for such an ipv4
 
-cmd/xxxxx/class/<ipv4>/ to retrive the eventyally present profilation class for a given ipv4
+cmd/&lt;password&gt;/class/&lt;ipv4&gt;/ to retrive the eventyally present profilation class for a given ipv4
