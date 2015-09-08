@@ -441,20 +441,20 @@ void *manage(void *arg_void){
 		else  {
 			// user whitelist
 			wlok=0;
-			printf("1\n"); fflush(stdout);
+			printf("1 %d %d %d\n",wlok,blok,cblok); fflush(stdout);
 			if((query==1||query==28) && domsearch(myipclass[myclass].mywl,myipclass[myclass].nmywl,dominio))wlok=1;
 			// user blacklist
 			blok=0;
-			printf("2\n"); fflush(stdout);
+			printf("2 %d %d %d\n",wlok,blok,cblok); fflush(stdout);
 			if(!wlok && (query==1||query==28) && domsearch(myipclass[myclass].mybl,myipclass[myclass].nmybl,dominio))blok=1;
 			// common black list
 			cblok=0;
-			printf("3\n"); fflush(stdout);
+			printf("3 %d %d %d\n",wlok,blok,cblok); fflush(stdout);
 			// if(!wlok && !blok && (query==1||query==28) && myipclass[myclass].bl && domsearch(commonblacklist,totcommonblacklist,dominio))cblok=1;
 			// set splash
-			printf("4\n"); fflush(stdout);
+			printf("4 %d %d %d\n",wlok,blok,cblok); fflush(stdout);
 			if(cblok || blok){
-				printf("5\n"); fflush(stdout);
+				printf("5 %d %d %d\n",wlok,blok,cblok); fflush(stdout);
 				myipclass[myclass].totfiltered++;
 				if(query==28)lenrecv=12+lenanswer+28;
 				else lenrecv=12+lenanswer+16;
