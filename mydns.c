@@ -220,7 +220,9 @@ int domsearch(char **myvector,long lenvector,char *mydom){
 	i=0;
 	aux=mydom;
 	for(;;){
+		printf("mysearch for %s\n",aux); fflush(stdout);
 		if(mysearch(myvector,lenvector,aux)==1)return 1;
+		printf("mysearch for dopo mysearch\n"); fflush(stdout);
 		for(;;){
 			if(*aux=='\0' || i>=BUFMSG)return 0;
 			if(*aux=='.' && i+1<BUFMSG){
@@ -231,6 +233,7 @@ int domsearch(char **myvector,long lenvector,char *mydom){
 		aux++;
 		i++;
 	}
+	printf("mysearch exit\n"); fflush(stdout);
 }
 
 void *manage(void *arg_void){
