@@ -439,7 +439,7 @@ void *manage(void *arg_void){
 			}
 		}
 		else  {
-			printf("entra\n");
+			printf("entra\n"); fflush(stdout);
 			// user whitelist
 			wlok=0;
 			if((query==1||query==28) && domsearch(myipclass[myclass].mywl,myipclass[myclass].nmywl,dominio))wlok=1;
