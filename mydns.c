@@ -215,14 +215,11 @@ void myconfig(){
 int domsearch(char **myvector,long lenvector,char *mydom){
 	char *aux;
 	int i;
-	printf("mysearch %ld\n",lenvector); fflush(stdout);
 	if(lenvector==0)return 0;
 	i=0;
 	aux=mydom;
 	for(;;){
-		printf("mysearch for %s\n",aux); fflush(stdout);
 		if(mysearch(myvector,lenvector,aux)==1)return 1;
-		printf("mysearch for dopo mysearch\n"); fflush(stdout);
 		for(;;){
 			if(*aux=='\0' || i>=BUFMSG)return 0;
 			if(*aux=='.' && i+1<BUFMSG){
@@ -234,7 +231,6 @@ int domsearch(char **myvector,long lenvector,char *mydom){
 			i++;
 		}
 	}
-	printf("mysearch exit\n"); fflush(stdout);
 }
 
 void *manage(void *arg_void){
@@ -455,7 +451,7 @@ void *manage(void *arg_void){
 			// common black list
 			cblok=0;
 			printf("3 %d %d %d\n",wlok,blok,cblok); fflush(stdout);
-			// if(!wlok && !blok && (query==1||query==28) && myipclass[myclass].bl && domsearch(commonblacklist,totcommonblacklist,dominio))cblok=1;
+			if(!wlok && !blok && (query==1||query==28) && myipclass[myclass].bl && domsearch(commonblacklist,totcommonblacklist,dominio))cblok=1;
 			// set splash
 			printf("4 %d %d %d\n",wlok,blok,cblok); fflush(stdout);
 			if(cblok || blok){
