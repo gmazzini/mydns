@@ -16,7 +16,7 @@ mydns.conf a list of lines each containing: ipv4 address, cidr, identification a
 
 commonblacklist a \n list of all th domains to be commonly blocked. A simple way to create or refrest it is from http://dsi.ut-capitole.fr/blacklists/index_en.php by selecting interesting category and by skipping eventually ip address which cannot be used in dns query. As a simple example to create please check mydownload bash script
 
-mydns support profilation for a single IP, where IP must be in the range 10.32.0.0/12, such an IP is assigned to a class 127.127.A.B/32 address that should be present in mydns.conf and is processed with the filtering action assigned to that translated address
+mydns support profilation for a single ipv4, where ipv4 must be in the range 10.32.0.0/12, such an ipv4 is assigned to a class 127.127.A.B/32 address that should be present in mydns.conf and is processed with the filtering action assigned to that translated address
 
 to compile the daemon please consider the makefile example and kust use make
 
@@ -28,12 +28,12 @@ cmd/xxxxx/reload/ for runtime mydns.conf reloading
 
 cmd/xxxxx/recbl/ for runtime commonblacklist reloading
 
-cmd/xxxxx/stats/<IP>/ to obtain for such an IP, the reference class as IP/cidr, the id, the number of query processed and filtered
+cmd/xxxxx/stats/<ipv4>/ to obtain for such an IP, the reference class as ipv4/cidr, the id, the number of query processed and filtered
 
-cmd/xxxxx/status/ to obtain the demon uptime and the number of query malformed and outofscope (ie. with IP not in mydns.conf)
+cmd/xxxxx/status/ to obtain the demon uptime and the number of query malformed and outofscope (ie. with ipv4 address not in mydns.conf)
 
-cmd/xxxxx/insert/<IP>/127.127.A.B/ to insert the IP in the 127.127.A.B/32 class, note that IP must be in the range 10.32.0.0/12
+cmd/xxxxx/insert/<ipv4>/127.127.A.B/ to insert the IP in the 127.127.A.B/32 class, note that ipv4 address must be in the range 10.32.0.0/12
 
-cmd/xxxxx/delete/<IP>/ to delete the eventually present profilation for such an IP
+cmd/xxxxx/delete/<ipv4>/ to delete the eventually present profilation for such an ipv4
 
-cmd/xxxxx/class/<IP>/ to retrive the eventyally present profilation class for a given IP
+cmd/xxxxx/class/<ipv4>/ to retrive the eventyally present profilation class for a given ipv4
