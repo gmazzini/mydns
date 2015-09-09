@@ -1,4 +1,4 @@
-// mydns v1.09 2015 by GM
+// mydns v1.10 2015 by GM
 // changelog (appears on github since v1.08)
 // v1.10 totallfiltered added
 // v1.09 totallquery added and status with comma separated format
