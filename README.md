@@ -31,7 +31,7 @@ cmd/&lt;password&gt;/recbl/ for runtime commonblacklist reloading
 
 cmd/&lt;password&gt;/stats/&lt;ipv4&gt;/ to obtain for such an ipv4, the reference class as ipv4/cidr, the id, the number of query processed and filtered
 
-cmd/&lt;password&gt;/status/ to obtain the demon uptime and the number of query malformed and outofscope (ie. with ipv4 address not in mydns.conf)
+cmd/&lt;password&gt;/status/ to obtain the demon uptime and some statistics like: the total number of query, the total number of splash response due to filtering, the number of query malformed (i.e. with not correct header) the number of query outofscope (i.e. with ipv4 address not in mydns.conf)
 
 cmd/&lt;password&gt;/insert/&lt;ipv4&gt;/127.127.A.B/ to insert the IP in the 127.127.A.B/32 class, note that ipv4 address must be in the range 10.32.0.0/12
 
