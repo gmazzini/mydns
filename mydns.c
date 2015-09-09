@@ -1,6 +1,6 @@
 // mydns v1.09 2015 by GM
 // changelog (appears on github since v1.08)
-// v1.10 totallfilter added
+// v1.10 totallfiltered added
 // v1.09 totallquery added and status with comma separated format
 // v1.08 double backup dns query with 200ms timeout and separate boot & conf file
 // v1.07 backup dns query to 8.8.8.8 with 200ms timeout  
@@ -71,7 +71,7 @@ long totcommonblacklist=0;
 char dnserver[20],bkp1dns[20],bkp2dns[20],ipv4splash[20],ipv6splash[40],mypassword[40];
 time_t starttime;
 char cstarttime[30];
-unsigned long totmalformed,totoutscope,totallquery,totallfilter;
+unsigned long totmalformed,totoutscope,totallquery,totallfiltered;
 unsigned long mymask[33];
 unsigned long *myprofile;
 
@@ -422,7 +422,7 @@ void *manage(void *arg_void){
 							}
 							// status
 							else if(strcmp(aux2,"status")==0){
-								sprintf(auxbuf,"start=%s totallquery=%'lu totallfilter=%'lu totmalformed=%'lu totoutscope=%'lu",cstarttime,totallquery,totallfilter,totmalformed,totoutscope);
+								sprintf(auxbuf,"start=%s totallquery=%'lu totallfiltered=%'lu totmalformed=%'lu totoutscope=%'lu",cstarttime,totallquery,totallfiltered,totmalformed,totoutscope);
 							}
 							// unknown
 							else sprintf(auxbuf,"command unknown");
@@ -453,7 +453,7 @@ void *manage(void *arg_void){
 			// set splash
 			if(cblok || blok){
 				myipclass[myclass].totfiltered++;
-				totallfilter++;
+				totallfiltered++;
 				if(query==28)lenrecv=12+lenanswer+28;
 				else lenrecv=12+lenanswer+16;
 				if(lenrecv<BUFMSG){
@@ -535,7 +535,7 @@ int main(int argc, char**argv){
 	FILE *fp;
 	
 	// initialization
-	totallquery=totallfilter=totmalformed=totoutscope=0;
+	totallquery=totallfiltered=totmalformed=totoutscope=0;
 	tid=(pthread_t *)malloc(NTHREAD*sizeof(pthread_t));
 	commonblacklist=(char **)malloc(NCOMMONBLACKLIST*sizeof(char *));
 	setlocale(LC_NUMERIC,"");
